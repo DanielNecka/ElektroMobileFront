@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Map } from '../../components/map/map/map';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [Map],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'normalize.css';
+@import 'mapbox-gl/dist/mapbox-gl.css';
+
+html {
+    overflow: hidden;
+    height: 100%;
+    
+    body {
+        margin: 4vh 5% 0px 5%;
+    }
+    
+    .mapboxgl-user-location-dot::after,
+    .mapboxgl-user-location-dot::before {
+        background-color: rgb(34, 34, 34) !important;
+    }  
+    .mapboxgl-user-location-accuracy-circle {
+        background-color: rgba(34, 34, 34, 0.15) !important;
+        border: 1px solid rgba(34, 34, 34, 0.4);
+    }
+
+    .mapboxgl-user-location-heading {
+        display: none !important;
+    }
+}
