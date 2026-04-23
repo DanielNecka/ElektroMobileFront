@@ -25,7 +25,7 @@ export class Map {
       config: {
         basemap: {
           theme: 'monochrome',
-          lightPreset: 'dawn' //dawn | dusk
+          lightPreset: 'dawn'
         }
       }
     };
@@ -57,7 +57,7 @@ export class Map {
     this.map.easeTo({
       center: this.position,
       zoom: 18.5,
-      offset: [0, 200],
+      offset: [0, -200],
       duration: 1000
     });
   }

@@ -1,0 +1,31 @@
+<ion-accordion-group #accordionGroup>
+  <ion-accordion value="brand">
+    <ion-item slot="header" color="light">
+      <ion-label>Brand: {{ selectedBrand || 'not selected' }}</ion-label>
+    </ion-item>
+    <div slot="content">
+      <ion-list>
+        @for (item of brands; track item.brand) {
+          <ion-item button [detail]="false" (click)="selectBrand(item.brand, item.models)">
+            {{ item.brand }}
+          </ion-item>
+        }
+      </ion-list>
+    </div>
+  </ion-accordion>
+
+  <ion-accordion value="model" [disabled]="!selectedBrand">
+    <ion-item slot="header" color="light">
+      <ion-label>Model: {{ selectedModel || 'not selected' }}</ion-label>
+    </ion-item>
+    <div slot="content">
+      <ion-list>
+        @for (model of models; track model) {
+          <ion-item button [detail]="false" (click)="selectModel(model)">
+            {{ model }}
+          </ion-item>
+        }
+      </ion-list>
+    </div>
+  </ion-accordion>
+</ion-accordion-group>

@@ -6,7 +6,8 @@ html {
     height: 100%;
     
     body {
-        margin: 4vh 5% 0px 5%;
+        margin: 0vh 5% 0px 5%;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     }
 
     .mapboxgl-ctrl-geolocate {
@@ -24,5 +25,20 @@ html {
 
     .mapboxgl-user-location-heading {
         display: none !important;
+    }
+
+    ion-searchbar {
+        padding: 0 !important;
+
+        margin: 0 !important;
+        --border-radius: 15px !important;
+
+        .searchbar-input-container {
+            height: 50px !important;
+        }
+
+        input.searchbar-input {
+            height: 50px !important;
+        }
     }
 }

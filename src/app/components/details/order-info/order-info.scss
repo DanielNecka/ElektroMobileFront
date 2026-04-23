@@ -1,0 +1,27 @@
+ion-accordion-group {
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+ion-accordion {
+    ion-item[slot="header"] {
+        --min-height: 30px;
+        --border-width: 0;
+        --inner-border-width: 0;
+        --padding-start: 0;
+        --padding-end: 0;
+        --inner-padding-end: 0;
+
+        ion-label {
+            font-size: 18px !important;
+            font-weight: 600;
+        }
+    }
+
+    ion-list ion-item {
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        --detail-icon-display: none;
+    }
+}
