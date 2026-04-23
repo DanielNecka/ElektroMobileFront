@@ -1,6 +1,21 @@
 .map {
+    position: relative;
     width: 100%;
     height: 100vh;
 
     border-radius: 20px;
+
+    app-controls {
+        top: 20px;
+        right: 20px;
+        position: absolute;
+        z-index: 2;
+    }
+
+    app-theme-control {
+        top: 170px;
+        right: 20px;
+        position: absolute;
+        z-index: 2;
+    }
 }

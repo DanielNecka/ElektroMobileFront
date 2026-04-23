@@ -8,6 +8,10 @@ html {
     body {
         margin: 4vh 5% 0px 5%;
     }
+
+    .mapboxgl-ctrl-geolocate {
+        display: none;
+    }
     
     .mapboxgl-user-location-dot::after,
     .mapboxgl-user-location-dot::before {
