@@ -2,26 +2,100 @@ ion-accordion-group {
     border-radius: 5px;
     overflow: hidden;
     margin-bottom: 15px;
-}
+    margin-left: 10px;
 
-ion-accordion {
-    ion-item[slot="header"] {
-        --min-height: 30px;
-        --border-width: 0;
-        --inner-border-width: 0;
-        --padding-start: 0;
-        --padding-end: 0;
-        --inner-padding-end: 0;
+    ion-accordion {
+        ion-item[slot="header"] {
+            --min-height: 30px;
+            --border-width: 0;
+            --inner-border-width: 0;
+            --padding-start: 0;
+            --padding-end: 0;
+            --inner-padding-end: 0;
 
-        ion-label {
-            font-size: 18px !important;
-            font-weight: 600;
+            ion-label {
+                font-size: 18px !important;
+                font-weight: 600;
+            }
+        }
+
+        ion-list ion-item {
+            --padding-start: 0;
+            --inner-padding-end: 0;
+            --detail-icon-display: none;
         }
     }
+}
 
-    ion-list ion-item {
-        --padding-start: 0;
-        --inner-padding-end: 0;
-        --detail-icon-display: none;
+.title {
+    font-size: 24px;
+    font-weight: 600;
+
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+ion-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    ion-radio {
+        --border-radius: 4px;
+        --inner-border-radius: 4px;
+        --color: #ddd;
+        --color-checked: #000000;
+
+        font-size: 18px;
+        padding-left: 10px;
+
+        &.ios::part(container) {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        &.radio-checked.ios::part(container) {
+            border-color: #000000;
+        }
     }
+}
+
+.price {
+    margin-left: 10px;
+    margin-top: -5px;
+
+    span {
+        color: #999999;
+        font-weight: 600;
+    }
+}
+
+ion-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+    --inner-padding-start: 0;
+    --border-width: 0;
+    margin-left: 10px;
+
+    &.input-item {
+        margin-top: -20px;
+    }
+
+    ion-input {
+        padding: 0;
+        font-size: 20px;
+    }
+}
+
+ion-button {
+    width: calc(100% - 40px);
+    font-weight: 600;
+    --background: #000000;
+    --background-activated: #333333;
+
+    position: absolute;
+    bottom: 25vh;
 }

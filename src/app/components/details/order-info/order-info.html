@@ -1,3 +1,20 @@
+<p class="title">Podaj ilość kwH</p>
+<p class="price">Cena za 1 kwH: <span>1, 21 zł</span></p>
+<ion-item class="input-item">
+  <ion-input labelPlacement="floating" type="number">
+    <div slot="label">Ilość <ion-text color="danger">(Wymagane)</ion-text></div>
+  </ion-input>
+</ion-item>
+
+<p class="title">Wybierz Lokalizacje</p>
+
+<ion-radio-group value="custom-checked">
+  <ion-radio value="custom-checked">Obecna lokalizacja</ion-radio>
+  <ion-radio value="custom">Wpisana lokalizacja</ion-radio>
+</ion-radio-group>
+
+<p class="title">Wybierz samochód</p>
+
 <ion-accordion-group #accordionGroup>
   <ion-accordion value="brand">
     <ion-item slot="header" color="light">
@@ -29,3 +46,5 @@
     </div>
   </ion-accordion>
 </ion-accordion-group>
+
+<ion-button>Przejdź do płatności</ion-button>

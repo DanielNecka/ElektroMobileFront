@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
+import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonInput, IonText, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-order-info',
-  imports: [IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList],
+  imports: [IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList,  IonRadio, IonRadioGroup, IonInput, IonItem, IonList, IonText, IonButton  ],
   templateUrl: './order-info.html',
   styleUrl: './order-info.scss',
 })
