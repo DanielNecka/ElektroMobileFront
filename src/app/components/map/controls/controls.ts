@@ -12,9 +12,9 @@ import { layers, map } from 'ionicons/icons';
 export class Controls {
   @Input() map!: mapboxgl.Map;
   @Input() onGoToPosition!: () => void;
-  is3D: boolean = true;
-  showTheme: boolean = false;
-  bearing = 0;
+  protected is3D: boolean = true;
+  protected showTheme: boolean = false;
+  protected bearing = 0;
 
   constructor() {
     addIcons({ layers, map });
@@ -26,14 +26,14 @@ export class Controls {
     });
   }
 
-  pointNorth() {
+  protected pointNorth(): void {
     this.map.easeTo({
       bearing: 0,
       duration: 600
     });
   }
 
-  toggle3D() {
+  protected toggle3D(): void {
     this.is3D = !this.is3D;
 
     this.map.easeTo({
@@ -42,11 +42,11 @@ export class Controls {
     });
   }
 
-  toggleTheme() {
+  protected toggleTheme(): void {
     this.showTheme = !this.showTheme;
   }
 
-  changeTheme(event: any) {
+  protected changeTheme(event: any): void {
     const value = event.detail.value;
     const presets: Record<string, string> = {
       default: 'dawn',

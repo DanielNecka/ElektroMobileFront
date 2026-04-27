@@ -10,9 +10,9 @@ import { Controls } from "../controls/controls";
   styleUrl: './map.scss',
 })
 export class Map {
-  map!: mapboxgl.Map;
-  mapConfig: mapboxgl.MapOptions;
-  position: [number, number] = [19.9450, 50.0647];
+  private map!: mapboxgl.Map;
+  private mapConfig: mapboxgl.MapOptions;
+  private position: [number, number] = [19.9450, 50.0647];
 
   constructor() {
     this.mapConfig = {
@@ -53,7 +53,7 @@ export class Map {
     });
   }
 
-  goToCurrentPosition() {
+  private goToCurrentPosition(): void {
     this.map.easeTo({
       center: this.position,
       zoom: 18.5,

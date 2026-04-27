@@ -1,11 +1,15 @@
-<ion-modal [breakpoints]="[0.225, 0.8]" [initialBreakpoint]="0.225" [isOpen]="true" [backdropBreakpoint]="1" [canDismiss]="false">
+<ion-modal
+    [breakpoints]="[0.225, 0.8]" [initialBreakpoint]="0.225" [isOpen]="true" [backdropBreakpoint]="1" [canDismiss]="false" [handleBehavior]="'none'">
     <ng-template>
         <div class="modal-content">
             @if (step == 1) {
-                <app-order-info></app-order-info>
+                <app-order (orderAccordionOpenChange)="onAccordionChange($event)"></app-order>
             }
             @else if (step == 2) {
                 <app-order-detail></app-order-detail>
+            }
+            @else if (step == 3) {
+                <app-order-info></app-order-info>
             }
         </div>
     </ng-template>
