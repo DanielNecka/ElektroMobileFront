@@ -38,6 +38,19 @@ export class LoginPage {
     }
   }
 
+  async loginWithGoogle() {
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+
+    try {
+      await this.authService.loginWithGoogle();
+      this.isSubmitting = false;
+      this.router.navigate(['/main']);
+    } catch (err: any) {
+      this.isSubmitting = false;
+    }
+  }
+
   async showToast() {
     const toast = await this.toastController.create({
       message: 'Sposób logowania niedostępny w tej wersji aplikacji. Przepraszamy za niedogodności.',

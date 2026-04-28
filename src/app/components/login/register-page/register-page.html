@@ -49,7 +49,7 @@
 <p class="middle">or</p>
 
 <div class="btn-row">
-    <ion-button (click)="showToast()">
+    <ion-button (click)="registerWithGoogle()" [disabled]="isSubmitting">
         <img src="assets/icons/google.svg" alt="Google">
     </ion-button>
     <ion-button (click)="showToast()">

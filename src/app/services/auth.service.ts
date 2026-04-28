@@ -1,5 +1,5 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -28,18 +28,20 @@ export class AuthService {
     );
     const token = await credential.user.getIdToken();
 
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.registerProfile(token, name, email, phone);
+  }
 
-    try {
-      await firstValueFrom(this.http.post(
-        `${environment.backendUrl}/auth/register`,
-        { name, email, phone },
-        { headers }
-      ));
-      return { backendOk: true };
-    } catch {
-      return { backendOk: false };
-    }
+  async loginWithGoogle(): Promise<{ backendOk: boolean }> {
+    const provider = new GoogleAuthProvider();
+    const credential = await runInInjectionContext(this.injector, () =>
+      signInWithPopup(this.auth, provider)
+    );
+    const token = await credential.user.getIdToken();
+    const name = credential.user.displayName || '';
+    const email = credential.user.email || '';
+    const phone = credential.user.phoneNumber || '';
+
+    return this.registerProfile(token, name, email, phone);
   }
 
   logout() {
@@ -52,5 +54,20 @@ export class AuthService {
     const currentUser = this.auth.currentUser;
     if (!currentUser) return null;
     return currentUser.getIdToken();
+  }
+
+  private async registerProfile(token: string, name: string, email: string, phone: string): Promise<{ backendOk: boolean }> {
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    try {
+      await firstValueFrom(this.http.post(
+        `${environment.backendUrl}/auth/register`,
+        { name, email, phone },
+        { headers }
+      ));
+      return { backendOk: true };
+    } catch {
+      return { backendOk: false };
+    }
   }
 }
