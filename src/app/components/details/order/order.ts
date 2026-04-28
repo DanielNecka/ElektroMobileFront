@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonButton, IonContent, IonPicker, IonPickerColumn, IonPickerColumnOption } from '@ionic/angular/standalone';
-import { Details } from '../details/details';
 
 @Component({
   selector: 'app-order',

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { IonInput, IonItem, IonList, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login-page',
-  imports: [],
+  imports: [IonInput, IonItem, IonList, IonButton],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
 })
