@@ -2,7 +2,7 @@
 
 <ion-list lines="full" mode="md">
     <ion-item>
-        <ion-input>
+        <ion-input placeholder="login">
             <span slot="label">
                 <span class="material-symbols-outlined">person</span>
             </span>
@@ -10,7 +10,7 @@
     </ion-item>
 
     <ion-item>
-        <ion-input type="password">
+        <ion-input type="password" placeholder="hasło">
             <span slot="label">
                 <span class="material-symbols-outlined">lock</span>
             </span>
@@ -23,8 +23,12 @@
 <p class="middle">or</p>
 
 <div class="btn-row">
-    <ion-button>google</ion-button>
-    <ion-button>apple</ion-button>
+    <ion-button (click)="showToast()">
+        <img src="assets/icons/google.svg" alt="Google">
+    </ion-button>
+    <ion-button (click)="showToast()">
+        <img src="assets/icons/apple.svg" alt="Apple">
+    </ion-button>
 </div>
 
 <p class="middle grey line">zapomniałem hasła</p>

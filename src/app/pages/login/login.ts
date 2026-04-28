@@ -9,5 +9,5 @@ import { LoginPage } from '../../components/login/login-page/login-page';
   styleUrl: './login.scss',
 })
 export class Login {
-  protected page: "login" | "register" = "register"; 
+  protected page: "login" | "register" = "login"; 
 }

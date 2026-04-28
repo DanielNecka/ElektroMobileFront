@@ -11,5 +11,5 @@ import { Main } from "./pages/main/main";
 })
 export class App {
   protected readonly title = signal('ElektroMobileFront');
-  isLoggedIn: boolean = false;
+  //isLoggedIn: boolean = false;
 }
