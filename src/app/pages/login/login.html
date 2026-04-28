@@ -1,3 +1,7 @@
-<app-search-bar></app-search-bar>
-<app-map></app-map>
-<app-details></app-details>
+<div class="login-container">
+    @if (page === "login") {
+        <app-login-page></app-login-page>
+    } @else if (page === "register") {
+        <app-register-page></app-register-page>
+    }
+</div>

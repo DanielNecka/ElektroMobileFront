@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { Map } from '../../components/map/map/map';
-import { SearchBar } from "../../components/search-bar/search-bar";
-import { Details } from "../../components/details/details/details";
+import { RegisterPage } from '../../components/login/register-page/register-page';
+import { LoginPage } from '../../components/login/login-page/login-page';
 
 @Component({
   selector: 'app-login',
-  imports: [Map, SearchBar, Details],
+  imports: [LoginPage, RegisterPage],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
-
+  protected page: "login" | "register" = "login"; 
 }
