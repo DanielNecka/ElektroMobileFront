@@ -32,6 +32,22 @@ ion-button {
     --background-activated: #333333;
 }
 
+.btn-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    ion-button{
+        width: 45%;
+        --background: #a8a7a7;
+        --background-activated: #5b5b5b;
+
+        img {
+            width: 30px;
+        }
+    }
+}
+
 .middle {
     width: 100%;
     text-align: center;

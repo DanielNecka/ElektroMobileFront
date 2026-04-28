@@ -1,7 +1,7 @@
 <div class="login-container">
     @if (page === "login") {
-        <app-login-page></app-login-page>
+        <app-login-page (switchToRegister)="page = 'register'"></app-login-page>
     } @else if (page === "register") {
-        <app-register-page></app-register-page>
+        <app-register-page (switchToLogin)="page = 'login'"></app-register-page>
     }
 </div>

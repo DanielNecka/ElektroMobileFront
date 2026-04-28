@@ -2,7 +2,7 @@
 
 <ion-list lines="full" mode="md">
     <ion-item>
-        <ion-input placeholder="login">
+        <ion-input [(ngModel)]="email" type="email" placeholder="email">
             <span slot="label">
                 <span class="material-symbols-outlined">person</span>
             </span>
@@ -10,7 +10,7 @@
     </ion-item>
 
     <ion-item>
-        <ion-input type="password" placeholder="hasło">
+        <ion-input [(ngModel)]="password" type="password" placeholder="hasło">
             <span slot="label">
                 <span class="material-symbols-outlined">lock</span>
             </span>
@@ -18,7 +18,10 @@
     </ion-item>
 </ion-list>
 
-<ion-button>Zaloguj</ion-button>
+<ion-button (click)="login()" [disabled]="isSubmitting">
+    <ion-spinner *ngIf="isSubmitting" name="dots"></ion-spinner>
+    <span>Zaloguj</span>
+</ion-button>
 
 <p class="middle">or</p>
 
@@ -32,3 +35,5 @@
 </div>
 
 <p class="middle grey line">zapomniałem hasła</p>
+
+<p class="middle">Nie masz konta? <span class="link" (click)="switchToRegister.emit()">Zarejestruj się</span></p>

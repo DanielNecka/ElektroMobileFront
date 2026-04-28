@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IonicModule } from '@ionic/angular';
 import { OrderInfo } from '../order-info/order-info';
 import { OrderDetail } from "../order-detail/order-detail";
 import { Order } from "../order/order";
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-details',
@@ -11,8 +13,19 @@ import { Order } from "../order/order";
   styleUrl: './details.scss',
 })
 export class Details {
+  protected isOpen = true;
   protected step: number = 1;
   private _touchHandler: ((e: Event) => void) | null = null;
+  private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.authService.currentUser$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(user => {
+        this.isOpen = !!user;
+      });
+  }
 
   protected onAccordionChange(isOpen: boolean): void {
     isOpen ? this.lockModal() : this.unlockModal();
