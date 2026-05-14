@@ -3,13 +3,19 @@
     <ng-template>
         <div class="modal-content">
             @if (step == 1) {
-                <app-order (orderAccordionOpenChange)="onAccordionChange($event)"></app-order>
+                <app-order
+                    (orderAccordionOpenChange)="onAccordionChange($event)"
+                    (orderSubmit)="onOrderSubmit($event)">
+                </app-order>
             }
-            @else if (step == 2) {
-                <app-order-detail></app-order-detail>
+            @else if (step == 2 && orderData) {
+                <app-order-detail
+                    [orderData]="orderData"
+                    (orderDetailSubmit)="onOrderDetailSubmit($event)">
+                </app-order-detail>
             }
-            @else if (step == 3) {
-                <app-order-info></app-order-info>
+            @else if (step == 3 && orderSummary) {
+                <app-order-info [orderSummary]="orderSummary"></app-order-info>
             }
         </div>
     </ng-template>

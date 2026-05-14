@@ -1,4 +1,4 @@
-<div class="search-bar-container">
-    <ion-searchbar show-clear-button="focus" value="Wpisz lokalizacje"></ion-searchbar>
+<div class="search-bar-container" (click)="showToast()">
+    <ion-searchbar show-clear-button="focus" value="Wpisz lokalizacje" [disabled]="true"></ion-searchbar>
     <div class="avatar" (click)="logout()">D</div>
 </div>

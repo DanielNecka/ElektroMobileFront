@@ -1,6 +1,13 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonButton, IonContent, IonPicker, IonPickerColumn, IonPickerColumnOption } from '@ionic/angular/standalone';
 
+export interface OrderData {
+  brand: string;
+  model: string;
+  kwh: number;
+  location: 'current' | 'custom';
+}
+
 @Component({
   selector: 'app-order',
   imports: [IonAccordion, IonAccordionGroup, IonItem, IonLabel, IonList, IonRadio, IonRadioGroup, IonButton, IonContent, IonPicker, IonPickerColumn, IonPickerColumnOption],
@@ -13,6 +20,8 @@ export class Order {
 
   protected selectedBrand: string = '';
   protected selectedModel: string = '';
+  protected selectedKwh: number = 5;
+  protected selectedLocation: 'current' | 'custom' = 'current';
   protected brands: { brand: string, models: string[] }[] = [
     { brand: 'Tesla', models: ['Model 3', 'Model Y', 'Model S', 'Model X'] },
     { brand: 'Rivian', models: ['R1T', 'R1S'] },
@@ -28,6 +37,7 @@ export class Order {
 
   @ViewChild('accordionGroup') accordionGroup!: IonAccordionGroup;
   @Output() orderAccordionOpenChange = new EventEmitter<boolean>();
+  @Output() orderSubmit = new EventEmitter<OrderData>();
 
   protected selectModel(brand: string, model: string): void  {
     this.selectedBrand = brand;
@@ -44,5 +54,32 @@ export class Order {
 
   protected onInnerAccordionChange(event: CustomEvent): void {
     event.stopPropagation();
+  }
+
+  protected onKwhChange(event: CustomEvent): void {
+    const value = Number(event.detail?.value);
+    if (!Number.isNaN(value)) {
+      this.selectedKwh = value;
+    }
+  }
+
+  protected onLocationChange(event: CustomEvent): void {
+    const value = event.detail?.value as 'current' | 'custom';
+    if (value === 'current' || value === 'custom') {
+      this.selectedLocation = value;
+    }
+  }
+
+  protected submitOrder(): void {
+    if (!this.selectedBrand || !this.selectedModel) {
+      return;
+    }
+
+    this.orderSubmit.emit({
+      brand: this.selectedBrand,
+      model: this.selectedModel,
+      kwh: this.selectedKwh,
+      location: this.selectedLocation,
+    });
   }
 }

@@ -33,7 +33,7 @@
 <p class="title m10">Podaj ilość kWh</p>
 
 <ion-picker>
-  <ion-picker-column [value]="1">
+    <ion-picker-column [value]="selectedKwh" (ionChange)="onKwhChange($event)">
     <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
     <ion-picker-column-option [value]="5">5</ion-picker-column-option>
     <ion-picker-column-option [value]="10">10</ion-picker-column-option>
@@ -53,10 +53,10 @@
 
 <p class="title m10">Wybierz Lokalizacje</p>
 
-<ion-radio-group value="custom-checked">
-    <ion-radio value="custom-checked">Obecna lokalizacja</ion-radio>
-    <ion-radio value="custom">Wpisana lokalizacja</ion-radio>
+<ion-radio-group [value]="selectedLocation" (ionChange)="onLocationChange($event)">
+    <ion-radio value="current">Obecna lokalizacja</ion-radio>
+    <ion-radio value="custom" disabled>Wpisana lokalizacja</ion-radio>
 </ion-radio-group>
 </div>
 
-<ion-button>Przejdź do płatności</ion-button>
+<ion-button (click)="submitOrder()" [disabled]="!selectedModel">Przejdź do płatności</ion-button>

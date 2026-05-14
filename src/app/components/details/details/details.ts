@@ -1,10 +1,11 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { OrderInfo } from '../order-info/order-info';
-import { OrderDetail } from "../order-detail/order-detail";
-import { Order } from "../order/order";
+import { OrderDetail, OrderSummary } from "../order-detail/order-detail";
+import { Order, OrderData } from "../order/order";
 import { AuthService } from '../../../services/auth.service';
+import { OrdersService } from '../../../services/orders.service';
 
 @Component({
   selector: 'app-details',
@@ -15,8 +16,12 @@ import { AuthService } from '../../../services/auth.service';
 export class Details {
   protected isOpen = true;
   protected step: number = 1;
+  protected orderData: OrderData | null = null;
+  protected orderSummary: OrderSummary | null = null;
   private _touchHandler: ((e: Event) => void) | null = null;
   private authService = inject(AuthService);
+  private ordersService = inject(OrdersService);
+  private toastController = inject(ToastController);
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -29,6 +34,63 @@ export class Details {
 
   protected onAccordionChange(isOpen: boolean): void {
     isOpen ? this.lockModal() : this.unlockModal();
+  }
+
+  protected onOrderSubmit(data: OrderData): void {
+    this.orderData = data;
+    this.step = 2;
+  }
+
+  protected async onOrderDetailSubmit(summary: OrderSummary): Promise<void> {
+    this.orderSummary = summary;
+    this.step = 3;
+    
+    // Send order to backend
+    await this.sendOrderToBackend(summary);
+  }
+
+  private async sendOrderToBackend(summary: OrderSummary): Promise<void> {
+    try {
+      // Default location (Kraków center)
+      let lat = 50.0647;
+      let lng = 19.9450;
+
+      if (summary.location === 'current') {
+        try {
+          const location = await this.ordersService.getCurrentLocation();
+          lat = location.latitude;
+          lng = location.longitude;
+        } catch (error) {
+          console.warn('Geolocation failed, using default location:', error);
+          // Continue with default location
+        }
+      }
+
+      await this.ordersService.createOrder({
+        brand: summary.brand,
+        model: summary.model,
+        kwh: summary.kwh,
+        locationLat: lat,
+        locationLng: lng
+      });
+
+      const toast = await this.toastController.create({
+        message: 'Zamówienie dodane! Czekamy na kierowcę.',
+        duration: 3000,
+        position: 'bottom',
+        color: 'success'
+      });
+      await toast.present();
+    } catch (error) {
+      console.error('Error creating order:', error);
+      const toast = await this.toastController.create({
+        message: 'Błąd przy dodawaniu zamówienia. Spróbuj ponownie.',
+        duration: 3000,
+        position: 'bottom',
+        color: 'danger'
+      });
+      await toast.present();
+    }
   }
 
   private lockModal(): void {

@@ -42,8 +42,11 @@
 </ion-list>
 
 <ion-button (click)="register()" [disabled]="isSubmitting">
-    <ion-spinner *ngIf="isSubmitting" name="dots"></ion-spinner>
-    <span>Zarejestruj</span>
+    @if (!isSubmitting) {
+        <span>Zarejestruj</span>
+    } @else {
+        <ion-spinner name="dots"></ion-spinner>
+    }
 </ion-button>
 
 <p class="middle">or</p>
@@ -52,9 +55,9 @@
     <ion-button (click)="registerWithGoogle()" [disabled]="isSubmitting">
         <img src="assets/icons/google.svg" alt="Google">
     </ion-button>
-    <ion-button (click)="showToast()">
+    <ion-button (click)="showToast()" [disabled]="isSubmitting">
         <img src="assets/icons/apple.svg" alt="Apple">
     </ion-button>
 </div>
 
-<p class="middle">Masz już konto? <span class="link" (click)="switchToLogin.emit()">Zaloguj się</span></p>
+<p class="middle" (click)="switchToLogin.emit()">Masz już konto? <span class="link">Zaloguj się</span></p>

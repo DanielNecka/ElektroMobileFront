@@ -1,3 +1,10 @@
-<p class="title">Samochód przyjedzia za: <span class="gray">10 min</span></p>
-
-<ion-progress-bar [buffer]="buffer" [value]="progress"></ion-progress-bar>
+@if (orderSummary) {
+	<p class="title">Samochód przyjedzia za: <span class="gray">10 min</span></p>
+	<ion-progress-bar [buffer]="buffer" [value]="progress"></ion-progress-bar>
+	
+	<p class="title">Samochód: <span class="gray">{{ orderSummary.brand }} {{ orderSummary.model }}</span></p>
+	<p class="title">Ilość kWh: <span class="gray">{{ orderSummary.kwh }}</span></p>
+	<p class="title">Lokalizacja: <span class="gray">{{ orderSummary.location === 'current' ? 'obecna' : 'wpisana' }}</span></p>
+	<p class="title">Płatność: <span class="gray">{{ orderSummary.paymentMethod === 'cash' ? 'gotówka' : orderSummary.paymentMethod }}</span></p>
+	<p class="title">Cena: <span class="gray">{{ formatPrice(orderSummary.totalPrice) }} zł</span></p>
+}
