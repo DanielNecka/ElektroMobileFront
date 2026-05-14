@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { Firestore, collection, query, where, onSnapshot, doc } from '@angular/fire/firestore';
 
 export interface CreateOrderRequest {
   brand: string;
@@ -21,8 +22,6 @@ export class OrdersService {
 
   async createOrder(order: CreateOrderRequest) {
     const token = await this.authService.getToken();
-    console.log('Token:', token);
-    console.log('Order payload:', order);
     
     const headers = new HttpHeaders({ 
       'Authorization': `Bearer ${token}`,
@@ -54,5 +53,71 @@ export class OrdersService {
         }
       );
     });
+  }
+
+  watchLocation(callback: (coords: { latitude: number; longitude: number }) => void): number | null {
+    if (!navigator.geolocation) {
+      console.warn('Geolocation not supported');
+      return null;
+    }
+    return navigator.geolocation.watchPosition(
+      (position) => {
+        callback({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      (error) => console.warn(error),
+      { enableHighAccuracy: true }
+    );
+  }
+
+  clearWatchLocation(watchId: number): void {
+    if (navigator.geolocation && watchId) {
+      navigator.geolocation.clearWatch(watchId);
+    }
+  }
+
+  private firestore = inject(Firestore);  
+
+  listenToPendingOrders(callback: (orders: any[]) => void): () => void {
+    const q = query(
+      collection(this.firestore, 'orders'),
+      where('statusId', '==', 'Oczekuje na kierowce')
+    );
+    return onSnapshot(q, snapshot => {
+      callback(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+  }
+
+  listenToOrder(orderId: string, callback: (order: any) => void): () => void {
+    const docRef = doc(this.firestore, 'orders', orderId);
+    return onSnapshot(docRef, docSnap => {
+      if (docSnap.exists()) {
+        callback({ id: docSnap.id, ...docSnap.data() });
+      }
+    });
+  }
+
+  async acceptOrder(orderId: string, driverUid: string): Promise<void> {
+    const token = await this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    await firstValueFrom(
+      this.http.patch(`${environment.backendUrl}/orders/${orderId}/accept`, { driverUid }, { headers })
+    );
+  }
+
+  async updateOrderStatus(orderId: string, statusId: string): Promise<void> {
+    const token = await this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    await firstValueFrom(
+      this.http.patch(`${environment.backendUrl}/orders/${orderId}/status`, { statusId }, { headers })
+    );
   }
 }

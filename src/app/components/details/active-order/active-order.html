@@ -1,0 +1,17 @@
+<div class="info-container">
+  <p class="detail-text"><strong>Marka i model:</strong> {{ order?.brand }} {{ order?.model }}</p>
+  <p class="detail-text"><strong>Pojemność:</strong> {{ order?.kwh }} kWh</p>
+  <p class="detail-text"><strong>Cena:</strong> {{ order?.totalPrice }} zł</p>
+  <p class="detail-text"><strong>Lokalizacja:</strong> {{ order?.locationLat }}, {{ order?.locationLng }}</p>
+
+  <div class="btns">
+    <ion-button class="google-maps-btn" (click)="openMaps()">Otwórz w Google Maps</ion-button>
+    
+    @if (order?.statusId !== 'Ładowanie') {
+      <ion-button (click)="confirmArrival()">Potwierdź przyjazd</ion-button>
+    } @else {
+      <ion-button class="finish-btn" (click)="finishOrder()">Zakończ zlecenie</ion-button>
+    }
+  </div>
+
+</div>

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, ChangeDetectorRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { OrderInfo } from '../order-info/order-info';
@@ -6,10 +6,13 @@ import { OrderDetail, OrderSummary } from "../order-detail/order-detail";
 import { Order, OrderData } from "../order/order";
 import { AuthService } from '../../../services/auth.service';
 import { OrdersService } from '../../../services/orders.service';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { ActiveOrder } from '../active-order/active-order';
+import { PendingOrders } from "../pending-orders/pending-orders";
 
 @Component({
   selector: 'app-details',
-  imports: [IonicModule, OrderInfo, OrderDetail, Order],
+  imports: [IonicModule, OrderInfo, OrderDetail, Order, ActiveOrder, PendingOrders],
   templateUrl: './details.html',
   styleUrl: './details.scss',
 })
@@ -23,12 +26,25 @@ export class Details {
   private ordersService = inject(OrdersService);
   private toastController = inject(ToastController);
   private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
+  public isDriver: boolean = false;
+  private firestore = inject(Firestore);
+  protected acceptedOrder: any = null;
+  protected etaAmount: string = '';
+  private driverWatchId: number | null = null;
 
   constructor() {
     this.authService.currentUser$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(user => {
+      .subscribe(async user => {
         this.isOpen = !!user;
+
+        if (user) {
+          const snap = await getDoc(doc(this.firestore, 'users', user.uid));
+          this.isDriver = snap.data()?.['role'] === 'driver';
+        } else {
+          this.isDriver = false;
+        }
       });
   }
 
@@ -45,13 +61,11 @@ export class Details {
     this.orderSummary = summary;
     this.step = 3;
     
-    // Send order to backend
     await this.sendOrderToBackend(summary);
   }
 
   private async sendOrderToBackend(summary: OrderSummary): Promise<void> {
     try {
-      // Default location (Kraków center)
       let lat = 50.0647;
       let lng = 19.9450;
 
@@ -62,17 +76,41 @@ export class Details {
           lng = location.longitude;
         } catch (error) {
           console.warn('Geolocation failed, using default location:', error);
-          // Continue with default location
         }
       }
 
-      await this.ordersService.createOrder({
+      const response: any = await this.ordersService.createOrder({
         brand: summary.brand,
         model: summary.model,
         kwh: summary.kwh,
         locationLat: lat,
         locationLng: lng
       });
+
+      if (response && response.id) {
+        this.ordersService.listenToOrder(response.id, (orderData) => {
+          this.acceptedOrder = orderData;
+          if (orderData.statusId === 'Kierowca przydzielony') {
+             if ((window as any).showDriverLocation) {
+                const userLng = orderData.locationLng || lng;
+                const userLat = orderData.locationLat || lat;
+                const driverLng = orderData.driverLocationLng || (userLng + 0.005);
+                const driverLat = orderData.driverLocationLat || (userLat + 0.005);
+                
+                (window as any).showDriverLocation([userLng, userLat], [driverLng, driverLat], 'client', (eta: string) => {
+                   this.etaAmount = eta;
+                   this.cdr.detectChanges();
+                });
+             }
+          } else if (orderData.statusId === 'Zakończone') {
+             setTimeout(() => {
+                this.onOrderFinished();
+                this.cdr.detectChanges();
+             }, 3000);
+          }
+          this.cdr.detectChanges();
+        });
+      }
 
       const toast = await this.toastController.create({
         message: 'Zamówienie dodane! Czekamy na kierowcę.',
@@ -104,6 +142,42 @@ export class Details {
     if (this._touchHandler) {
       modal?.removeEventListener('touchmove', this._touchHandler, { capture: true });
       this._touchHandler = null;
+    }
+  }
+
+  protected async onOrderAccepted(order: any): Promise<void> {
+    this.acceptedOrder = order;
+    
+    if (this.isDriver && (window as any).showDriverLocation) {
+       this.driverWatchId = this.ordersService.watchLocation(async (location) => {
+           const orderRef = doc(this.firestore, 'orders', order.id);
+           try {
+             await updateDoc(orderRef, {
+                 driverLocationLng: location.longitude,
+                 driverLocationLat: location.latitude
+             });
+           } catch (error) {}
+
+           (window as any).showDriverLocation(
+             [order.locationLng, order.locationLat],
+             [location.longitude, location.latitude],
+             'driver'
+           );
+       });
+    }
+  }
+
+  protected onOrderFinished(): void {
+    if (this.driverWatchId !== null) {
+       this.ordersService.clearWatchLocation(this.driverWatchId);
+       this.driverWatchId = null;
+    }
+    this.acceptedOrder = null;
+    this.step = 1;
+    this.orderData = null;
+    this.orderSummary = null;
+    if ((window as any).clearRoute) {
+      (window as any).clearRoute();
     }
   }
 }

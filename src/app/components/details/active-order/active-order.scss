@@ -1,0 +1,47 @@
+.info-container {
+    padding: 10px 20px;
+
+    .detail-text {
+        font-size: 16px;
+        margin: 8px 0;
+        color: #333;
+        
+        strong {
+            font-weight: 600;
+            color: #000;
+        }
+    }
+
+    p {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+    }
+}
+
+.btns {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    ion-button {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        --background: #000000;
+        --background-activated: #333333;
+        --color: #ffffff;
+    }
+
+    .google-maps-btn {
+        --background: #f4f5f8;
+        --background-activated: #e0e0e0;
+        --color: #000000;
+    }
+    
+    .finish-btn {
+        --background: #000000;
+        --background-activated: #333333;
+        --color: #ffffff;
+    }
+}
