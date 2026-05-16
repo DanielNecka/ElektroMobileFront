@@ -13,6 +13,23 @@ export interface CreateOrderRequest {
   locationLng: number;
 }
 
+export interface OrderRecord {
+  id: string;
+  userId: string;
+  brand: string;
+  model: string;
+  kwh: number;
+  locationLat: number;
+  locationLng: number;
+  totalPrice: number;
+  statusId: string;
+  driverUid?: string;
+  driverLocationLat?: number;
+  driverLocationLng?: number;
+  createdAt?: { _seconds: number; _nanoseconds: number } | string | Date;
+  updatedAt?: { _seconds: number; _nanoseconds: number } | string | Date;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -99,14 +116,22 @@ export class OrdersService {
     });
   }
 
-  async acceptOrder(orderId: string, driverUid: string): Promise<void> {
+  async acceptOrder(orderId: string): Promise<void> {
     const token = await this.authService.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     await firstValueFrom(
-      this.http.patch(`${environment.backendUrl}/orders/${orderId}/accept`, { driverUid }, { headers })
+      this.http.patch(`${environment.backendUrl}/orders/${orderId}/accept`, {}, { headers })
+    );
+  }
+
+  async getMyOrders(): Promise<OrderRecord[]> {
+    const token = await this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return firstValueFrom(
+      this.http.get<OrderRecord[]>(`${environment.backendUrl}/orders`, { headers })
     );
   }
 

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { mapAuthError } from '../../../utils/auth-errors';
 
 @Component({
   selector: 'app-login-page',
@@ -35,6 +36,7 @@ export class LoginPage {
       this.router.navigate(['/main']);
     } catch (err: any) {
       this.isSubmitting = false;
+      await this.showAuthError(err);
     }
   }
 
@@ -48,6 +50,7 @@ export class LoginPage {
       this.router.navigate(['/main']);
     } catch (err: any) {
       this.isSubmitting = false;
+      await this.showAuthError(err);
     }
   }
 
@@ -56,6 +59,19 @@ export class LoginPage {
       message: 'Sposób logowania niedostępny w tej wersji aplikacji. Przepraszamy za niedogodności.',
       duration: 5000,
       position: 'bottom',
+    });
+    await toast.present();
+  }
+
+  private async showAuthError(err: unknown): Promise<void> {
+    const mapped = mapAuthError(err);
+    if (mapped.kind === 'silent') return;
+
+    const toast = await this.toastController.create({
+      message: mapped.text,
+      duration: 4000,
+      position: 'bottom',
+      color: 'danger',
     });
     await toast.present();
   }

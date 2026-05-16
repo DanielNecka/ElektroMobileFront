@@ -4,6 +4,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+export interface UserProfile {
+  uid: string;
+  name: string;
+  email: string;
+  phone: string;
+  role?: string;
+  createdAt?: { _seconds: number; _nanoseconds: number } | string | Date;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,6 +63,15 @@ export class AuthService {
     const currentUser = this.auth.currentUser;
     if (!currentUser) return null;
     return currentUser.getIdToken();
+  }
+
+  async getMyProfile(): Promise<UserProfile> {
+    const token = await this.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    return firstValueFrom(
+      this.http.get<UserProfile>(`${environment.backendUrl}/auth/me`, { headers })
+    );
   }
 
   private async registerProfile(token: string, name: string, email: string, phone: string): Promise<{ backendOk: boolean }> {

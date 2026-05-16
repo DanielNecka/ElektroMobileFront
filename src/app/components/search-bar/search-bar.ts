@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { IonSearchbar } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+import { Account } from '../account/account';
 
 @Component({
   selector: 'app-search-bar',
@@ -11,27 +10,17 @@ import { ToastController } from '@ionic/angular';
   styleUrl: './search-bar.scss',
 })
 export class SearchBar {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  
-  constructor(
-    private toastController: ToastController,
-  ) {}
+  private modalController = inject(ModalController);
+  private toastController = inject(ToastController);
 
-  logout(): void {
-    this.authService.logout().subscribe({
-      next: () => this.navigateAndReload(),
-      error: () => this.navigateAndReload(),
+  async openAccount(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: Account,
     });
+    await modal.present();
   }
 
-  private navigateAndReload(): void {
-    this.router.navigate(['/login'], { replaceUrl: true }).then(() => {
-      window.location.reload();
-    });
-  }
-
-  async showToast() {
+  async showToast(): Promise<void> {
     const toast = await this.toastController.create({
       message: 'Wyszukiwanie lokalizacji nie dostępne w tej wersji aplikacji. Przepraszamy za niedogodności.',
       duration: 5000,

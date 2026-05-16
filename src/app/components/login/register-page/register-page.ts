@@ -4,6 +4,7 @@ import { ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { mapAuthError } from '../../../utils/auth-errors';
 
 @Component({
   selector: 'app-register-page',
@@ -29,6 +30,12 @@ export class RegisterPage {
 
   async register() {
     if (this.isSubmitting) return;
+
+    if (!this.password || this.password !== this.passwordConfirm) {
+      await this.showMessage('Hasła nie są zgodne', 'danger');
+      return;
+    }
+
     this.isSubmitting = true;
 
     try {
@@ -37,6 +44,7 @@ export class RegisterPage {
       this.router.navigate(['/main']);
     } catch (err: any) {
       this.isSubmitting = false;
+      await this.showAuthError(err);
     }
   }
 
@@ -50,6 +58,7 @@ export class RegisterPage {
       this.router.navigate(['/main']);
     } catch (err: any) {
       this.isSubmitting = false;
+      await this.showAuthError(err);
     }
   }
 
@@ -58,6 +67,22 @@ export class RegisterPage {
       message: 'Sposób logowania niedostępny w tej wersji aplikacji. Przepraszamy za niedogodności.',
       duration: 5000,
       position: 'bottom',
+    });
+    await toast.present();
+  }
+
+  private async showAuthError(err: unknown): Promise<void> {
+    const mapped = mapAuthError(err);
+    if (mapped.kind === 'silent') return;
+    await this.showMessage(mapped.text, 'danger');
+  }
+
+  private async showMessage(message: string, color: 'danger' | 'success' = 'danger'): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 4000,
+      position: 'bottom',
+      color,
     });
     await toast.present();
   }

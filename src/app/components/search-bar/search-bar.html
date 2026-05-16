@@ -1,6 +1,6 @@
-<div class="search-bar-container" (click)="showToast()">
-    <ion-searchbar show-clear-button="focus" value="Wpisz lokalizacje" [disabled]="true"></ion-searchbar>
-    <div class="avatar" (click)="logout()">
+<div class="search-bar-container">
+    <ion-searchbar show-clear-button="focus" value="Wpisz lokalizacje" [disabled]="true" (click)="showToast()"></ion-searchbar>
+    <div class="avatar" (click)="openAccount()" role="button" aria-label="Moje konto">
         <span class="material-symbols-outlined">account_circle</span>
     </div>
 </div>
