@@ -1,0 +1,15 @@
+.title {
+    width: 100%;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+
+ion-button {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    --background: #000000;
+    --background-activated: #333333;
+}

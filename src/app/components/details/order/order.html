@@ -1,0 +1,62 @@
+<div class="details-container">
+    <ion-accordion-group #accordionGroup class="m25" (ionChange)="onAccordionChange($event)">
+    <ion-accordion value="car">
+        <ion-item slot="header" color="light">
+            <ion-label class="title">Wybierz samochód</ion-label>
+        </ion-item>
+        <div slot="content">
+            <ion-content class="brands-content">
+                <ion-accordion-group (ionChange)="onInnerAccordionChange($event)">
+                    @for (item of brands; track item.brand) {
+                    <ion-accordion [value]="item.brand">
+                        <ion-item slot="header" color="light">
+                            <ion-label>{{ item.brand }}</ion-label>
+                        </ion-item>
+                        <div slot="content">
+                            <ion-list>
+                                @for (model of item.models; track model) {
+                                    <ion-item button [detail]="false" (click)="selectModel(item.brand, model)"
+                                    [class.selected]="selectedBrand === item.brand && selectedModel === model">
+                                    {{ model }}
+                                    </ion-item>
+                                }
+                            </ion-list>
+                        </div>
+                    </ion-accordion>
+                    }
+                </ion-accordion-group>
+            </ion-content>
+        </div>
+    </ion-accordion>
+</ion-accordion-group>
+
+<p class="title m10">Podaj ilość kWh</p>
+
+<ion-picker>
+    <ion-picker-column [value]="selectedKwh" (ionChange)="onKwhChange($event)">
+    <ion-picker-column-option value="" disabled="true">--</ion-picker-column-option>
+    <ion-picker-column-option [value]="5">5</ion-picker-column-option>
+    <ion-picker-column-option [value]="10">10</ion-picker-column-option>
+    <ion-picker-column-option [value]="15">15</ion-picker-column-option>
+    <ion-picker-column-option [value]="20">20</ion-picker-column-option>
+    <ion-picker-column-option [value]="25">25</ion-picker-column-option>
+    <ion-picker-column-option [value]="30">30</ion-picker-column-option>
+    <ion-picker-column-option [value]="35">35</ion-picker-column-option>
+    <ion-picker-column-option [value]="40">40</ion-picker-column-option>
+    <ion-picker-column-option [value]="45">45</ion-picker-column-option>
+    <ion-picker-column-option [value]="50">50</ion-picker-column-option>
+    <ion-picker-column-option [value]="55">55</ion-picker-column-option>
+    <ion-picker-column-option [value]="60">60</ion-picker-column-option>
+    <div slot="suffix">kWh</div>
+  </ion-picker-column>
+</ion-picker>
+
+<p class="title m10">Wybierz Lokalizacje</p>
+
+<ion-radio-group [value]="selectedLocation" (ionChange)="onLocationChange($event)">
+    <ion-radio value="current">Obecna lokalizacja</ion-radio>
+    <ion-radio value="custom" disabled>Wpisana lokalizacja</ion-radio>
+</ion-radio-group>
+</div>
+
+<ion-button (click)="submitOrder()" [disabled]="!selectedModel">Przejdź do płatności</ion-button>

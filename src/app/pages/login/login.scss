@@ -1,0 +1,22 @@
+.login-container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    app-login-page {
+        width: 80%;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    app-register-page {
+        width: 80%;
+
+        display: flex;
+        flex-direction: column;
+    }
+}

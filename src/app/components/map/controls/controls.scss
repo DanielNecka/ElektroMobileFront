@@ -1,0 +1,50 @@
+.controls-container {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+
+    ion-fab-button {
+        width: 40px;
+        height: 40px;
+
+        --background: white;
+        --color: #333;
+        --border-radius: 20%;
+
+        font-weight: 600;
+        transition: all 0.2s ease;
+
+        &:active {
+            --background: #33333329;
+        }
+    }
+
+    ion-fab {
+        position: relative;
+    }
+
+    ion-fab-button img {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.controls-second-row {
+    margin-top: 10px;
+}
+
+.theme-controls-container {
+    margin-top: 10px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

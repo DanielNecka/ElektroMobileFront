@@ -1,0 +1,42 @@
+<p class="title">Logowanie</p>
+
+<ion-list lines="full" mode="md">
+    <ion-item>
+        <ion-input [(ngModel)]="email" type="email" placeholder="email">
+            <span slot="label">
+                <span class="material-symbols-outlined">person</span>
+            </span>
+        </ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-input [(ngModel)]="password" type="password" placeholder="hasło">
+            <span slot="label">
+                <span class="material-symbols-outlined">lock</span>
+            </span>
+        </ion-input>
+    </ion-item>
+</ion-list>
+
+<ion-button (click)="login()" [disabled]="isSubmitting">
+    @if (!isSubmitting) {
+            <span>Zaloguj</span>
+    } @else {
+        <ion-spinner name="dots"></ion-spinner>
+    }
+</ion-button>
+
+<p class="middle">or</p>
+
+<div class="btn-row">
+    <ion-button (click)="loginWithGoogle()" [disabled]="isSubmitting">
+        <img src="assets/icons/google.svg" alt="Google">
+    </ion-button>
+    <ion-button (click)="showToast()" [disabled]="isSubmitting">
+        <img src="assets/icons/apple.svg" alt="Apple">
+    </ion-button>
+</div>
+
+<p class="middle grey line">zapomniałem hasła</p>
+
+<p class="middle" (click)="switchToRegister.emit()">Nie masz konta? <span class="link">Zarejestruj się</span></p>

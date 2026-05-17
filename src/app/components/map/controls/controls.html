@@ -1,0 +1,42 @@
+<div class="controls-container">
+    <ion-fab>
+        <ion-fab-button>
+            <img src="assets/icons/localizationIcon.svg" (click)="onGoToPosition()" alt="">
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-fab>
+        <ion-fab-button (click)="pointNorth()">
+            <img src="assets/icons/northIcon.svg" [style.transform]="'rotate(' + bearing + 'deg)'" alt="">
+        </ion-fab-button>
+    </ion-fab>
+</div>
+
+<div class="controls-container controls-second-row">
+    <ion-fab>
+        <ion-fab-button (click)="toggle3D()">
+        {{ is3D ? '2D' : '3D' }}
+        </ion-fab-button>
+    </ion-fab>
+</div>
+
+<div class="controls-container controls-second-row">
+    <ion-fab>
+        <ion-fab-button (click)="toggleTheme()">
+            <img src="assets/icons/leyersIcon.svg" alt="">
+        </ion-fab-button>
+    </ion-fab>
+</div>
+
+@if (showTheme) {
+    <div class="theme-controls-container">
+        <ion-segment value="default" (ionChange)="changeTheme($event)">
+            <ion-segment-button value="default">
+                <ion-label>Light</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="segment">
+                <ion-label>Dark</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </div>
+}

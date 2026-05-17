@@ -1,0 +1,63 @@
+<p class="title">Rejestracja</p>
+
+<ion-list lines="full" mode="md">
+    <ion-item>
+        <ion-input [(ngModel)]="name" placeholder="imię i nazwisko">
+            <span slot="label">
+                <span class="material-symbols-outlined">person</span>
+            </span>
+        </ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-input [(ngModel)]="email" type="email" placeholder="email">
+            <span slot="label">
+                <span class="material-symbols-outlined">mail</span>
+            </span>
+        </ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-input [(ngModel)]="phone" type="tel" placeholder="888-888-8888">
+            <span slot="label">
+                <span class="material-symbols-outlined">phone</span>
+            </span>
+        </ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-input [(ngModel)]="password" type="password" placeholder="hasło">
+            <span slot="label">
+                <span class="material-symbols-outlined">lock</span>
+            </span>
+        </ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-input [(ngModel)]="passwordConfirm" type="password" placeholder="powtórz hasło">
+            <span slot="label">
+                <span class="material-symbols-outlined">lock</span>
+            </span>
+        </ion-input>
+    </ion-item>
+</ion-list>
+
+<ion-button (click)="register()" [disabled]="isSubmitting">
+    @if (!isSubmitting) {
+        <span>Zarejestruj</span>
+    } @else {
+        <ion-spinner name="dots"></ion-spinner>
+    }
+</ion-button>
+
+<p class="middle">or</p>
+
+<div class="btn-row">
+    <ion-button (click)="registerWithGoogle()" [disabled]="isSubmitting">
+        <img src="assets/icons/google.svg" alt="Google">
+    </ion-button>
+    <ion-button (click)="showToast()" [disabled]="isSubmitting">
+        <img src="assets/icons/apple.svg" alt="Apple">
+    </ion-button>
+</div>
+
+<p class="middle" (click)="switchToLogin.emit()">Masz już konto? <span class="link">Zaloguj się</span></p>

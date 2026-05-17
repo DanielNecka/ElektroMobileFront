@@ -1,0 +1,20 @@
+<div>
+  @if (orders.length === 0) {
+    <p class="title m10">Brak zamówień : (</p>
+  }
+  @for (order of orders; track order.id) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ order.model }}</ion-card-title>
+        <ion-card-subtitle>{{ order.brand }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>Wartość zamównia: {{ order.totalPrice }} zł</p>
+        <p>Ilość kWh: {{ order.kwh }}</p>
+      </ion-card-content>
+
+      <ion-button (click)="onAccept(order)">Akceptuj</ion-button>
+    </ion-card>
+  }
+</div>

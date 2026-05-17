@@ -1,0 +1,30 @@
+<ion-modal
+    [breakpoints]="[0.225, 0.8]" [initialBreakpoint]="0.225" [isOpen]="isOpen" [backdropBreakpoint]="1" [canDismiss]="false" [handleBehavior]="'none'">
+    <ng-template>
+        <div class="modal-content">
+            @if (!isDriver) {
+                @if (step == 1) {
+                    <app-order
+                        (orderAccordionOpenChange)="onAccordionChange($event)"
+                        (orderSubmit)="onOrderSubmit($event)">
+                    </app-order>
+                }
+                @else if (step == 2 && orderData) {
+                    <app-order-detail
+                        [orderData]="orderData"
+                        (orderDetailSubmit)="onOrderDetailSubmit($event)">
+                    </app-order-detail>
+                }
+                @else if (step == 3 && orderSummary) {
+                    <app-order-info [orderSummary]="orderSummary" [acceptedOrder]="acceptedOrder" [etaAmount]="etaAmount"></app-order-info>
+                }
+            }  @else if (isDriver) {
+                @if (!acceptedOrder) {
+                    <app-pending-orders (orderAccepted)="onOrderAccepted($event)"></app-pending-orders>
+                } @else {
+                    <app-active-order [order]="acceptedOrder" (orderFinished)="onOrderFinished()"></app-active-order>
+                }
+            }
+        </div>
+    </ng-template>
+</ion-modal>

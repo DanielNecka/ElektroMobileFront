@@ -1,0 +1,116 @@
+<ion-header class="account-header">
+    <ion-toolbar>
+        <ion-title>Moje konto</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="dismiss()" aria-label="Zamknij">
+                <span class="material-symbols-outlined" slot="icon-only">close</span>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="account-content">
+    <section class="profile">
+        @if (loadingProfile) {
+            <div class="profile-skeleton">
+                <ion-skeleton-text [animated]="true" style="width:96px;height:96px;border-radius:50%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width:60%;height:18px;margin-top:12px"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width:80%;height:14px;margin-top:8px"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width:40%;height:14px;margin-top:6px"></ion-skeleton-text>
+            </div>
+        } @else if (profile) {
+            <div class="avatar">
+                @if (photoURL) {
+                    <img [src]="photoURL" alt="" (error)="onAvatarError()" />
+                } @else {
+                    <div class="avatar-fallback">{{ initialsFor(profile.name) }}</div>
+                }
+            </div>
+
+            <h2 class="name">{{ profile.name || 'Bez nazwy' }}</h2>
+
+            <div class="role-row">
+                <ion-badge color="medium" mode="ios">{{ roleText(profile.role) }}</ion-badge>
+            </div>
+
+            <ul class="info-list">
+                <li>
+                    <span class="material-symbols-outlined">mail</span>
+                    <span>{{ profile.email }}</span>
+                </li>
+                @if (profile.phone) {
+                    <li>
+                        <span class="material-symbols-outlined">phone</span>
+                        <span>{{ profile.phone }}</span>
+                    </li>
+                }
+                @if (memberSince(profile.createdAt)) {
+                    <li>
+                        <span class="material-symbols-outlined">event</span>
+                        <span>Członek od {{ memberSince(profile.createdAt) }}</span>
+                    </li>
+                }
+            </ul>
+        } @else {
+            <p class="empty">Nie udało się załadować profilu</p>
+        }
+    </section>
+
+    <h3 class="section-title">Historia zamówień</h3>
+
+    @if (loadingOrders) {
+        <ion-list class="orders" lines="full">
+            @for (i of [1,2,3]; track i) {
+                <ion-item>
+                    <ion-label>
+                        <ion-skeleton-text [animated]="true" style="width:60%;height:16px"></ion-skeleton-text>
+                        <ion-skeleton-text [animated]="true" style="width:40%;height:12px;margin-top:6px"></ion-skeleton-text>
+                    </ion-label>
+                </ion-item>
+            }
+        </ion-list>
+    } @else if (orders.length === 0) {
+        <div class="empty-orders">
+            <span class="material-symbols-outlined">history</span>
+            <p>Brak zamówień</p>
+        </div>
+    } @else {
+        <ion-list class="orders" lines="full">
+            @for (order of orders; track order.id) {
+                <ion-item class="order-item">
+                    <ion-label>
+                        <div class="order-row top">
+                            <strong>{{ order.brand }} {{ order.model }}</strong>
+                            <ion-badge [color]="statusColor(order.statusId)" mode="ios">
+                                {{ order.statusId }}
+                            </ion-badge>
+                        </div>
+                        <div class="order-row middle">
+                            <span>{{ order.kwh }} kWh</span>
+                            <strong>{{ formatPrice(order.totalPrice) }} zł</strong>
+                        </div>
+                        <ion-note class="order-date">{{ orderDate(order.createdAt) }}</ion-note>
+                    </ion-label>
+                </ion-item>
+            }
+        </ion-list>
+    }
+</ion-content>
+
+<ion-footer class="account-footer">
+    <ion-toolbar>
+        <ion-button
+            class="logout-button"
+            expand="block"
+            fill="outline"
+            color="danger"
+            (click)="logout()"
+            [disabled]="loggingOut">
+            @if (loggingOut) {
+                <ion-spinner name="dots"></ion-spinner>
+            } @else {
+                <span>Wyloguj</span>
+            }
+        </ion-button>
+    </ion-toolbar>
+</ion-footer>

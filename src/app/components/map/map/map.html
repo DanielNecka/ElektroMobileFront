@@ -1,0 +1,5 @@
+<div id="map-container" class="map">
+    @if (map) {
+        <app-controls [map]="map" [onGoToPosition]="goToCurrentPosition.bind(this)"></app-controls>
+    }
+</div>
